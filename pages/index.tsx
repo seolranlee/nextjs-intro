@@ -2,40 +2,34 @@ import { useEffect, useState } from "react";
 import Seo from "../components/Seo";
 
 export interface Movie {
-  "adult": boolean;
-  "backdrop_path": string;
-  "genre_ids": number[];
-  "id": number;
-  "original_language": string;
-  "original_title": string;
-  "overview": string;
-  "popularity": number;
-  "poster_path": string;
-  "release_date": string;
-  "title": string;
-  "video": boolean;
-  "vote_average": number;
-  "vote_count": number
+  adult: boolean;
+  backdrop_path: string;
+  genre_ids: number[];
+  id: number;
+  original_language: string;
+  original_title: string;
+  overview: string;
+  popularity: number;
+  poster_path: string;
+  release_date: string;
+  title: string;
+  video: boolean;
+  vote_average: number;
+  vote_count: number
 }
 
-export default function Home(){
-  const [movies, setMovies] = useState<null|Movie[]>()
-  useEffect(() => {
-    (async() => {
-      // NexJS가 request를 masking 해줄 수 있다.
-      // /api/movies: fake fetching url
-      const { results } = await (await fetch("/api/movies")).json()
-      setMovies(results)
-    })()
-  }, [])
+interface Props {
+  results: Movie[]
+}
+
+export default function Home({ results }: Props){
   return (
     <div className="container">
       <Seo title="Home" />
-      {!movies && <h4>Loading...</h4>}
-      {movies?.map((movie) => (
-        <div className="movie" key={movie.id}>
-          <img src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} />
-          <h4>{movie.original_title}</h4>
+      {results?.map((result) => (
+        <div className="movie" key={result.id}>
+          <img src={`https://image.tmdb.org/t/p/w500/${result.poster_path}`} />
+          <h4>{result.original_title}</h4>
         </div>
       ))}
       <style jsx>{`
@@ -62,3 +56,25 @@ export default function Home(){
     </div>
   )
 }
+
+// getServerSideProps: 절대 이 네이밍을 변경해선 안된다
+// 해당 함수 안에 작성하는 코드들은 모두 서버쪽의 코드들이 된다 => server 에서만 실행된다.
+export async function getServerSideProps() {
+  // backend에서는 absolute URL을 써줘야한다.
+  // 브라우저는 주소(http://localhost:3000)을 들고 있지만 서버는 그게 아니므로.
+  const { results } = await (await fetch("http://localhost:3000/api/movies")).json()
+  return {
+    props: {
+      // 원하는 데이터를 집어넣는다.
+      // ReactJS는 이 props를 hydrate(흡수) 할 것이다.
+      results,
+    }
+  }
+}
+
+
+// 소스코드를 보면 그 안에 results(movies) data들이 있다.
+
+// 선택이 필요하다.
+// SSR을 할 것인지(API통신이 모두 끝난 후 모든 정보가 담긴 화면을 그려주고 그 전까지는 빈 화면)
+// CSR을 할 것인지(API통신이 모두 끝나기 전까지 nav gar, footer, 가운데에 loading을 보여줄지)
