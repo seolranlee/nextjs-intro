@@ -28,7 +28,7 @@ export default function Home({ results }: Props){
       <Seo title="Home" />
       {results?.map((result) => (
         <div className="movie" key={result.id}>
-          <img src={`https://image.tmdb.org/t/p/w500/${result.poster_path}`} />
+          <img src={`https://image.tmdb.org/t/p/w500${result.poster_path}`} />
           <h4>{result.original_title}</h4>
         </div>
       ))}
@@ -38,6 +38,9 @@ export default function Home({ results }: Props){
           grid-template-columns: 1fr 1fr;
           padding: 20px;
           gap: 20px;
+        }
+        .movie {
+          cursor: pointer;
         }
         .movie img {
           max-width: 100%;
