@@ -1,7 +1,5 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-// css 모듈 패턴
-import styles from "./NavBar.module.css"
 
 export default function NavBar(){
   // useRouter: NextJS에서 제공해주는 router hook
@@ -9,18 +7,24 @@ export default function NavBar(){
   return (
     <nav>
       <Link href="/">
-        <a
-          className={`${styles.link} ${router.pathname === "/" ? styles.active : ""}`}
-        >Home</a>
+        <a className={router.pathname === "/" ? "active" : ""}>Home</a>
       </Link>
       <Link href="/about">
-        <a
-          className={[
-            styles.link,
-            router.pathname === "/about" ? styles.active : ""
-          ].join(" ")}
-        >About</a>
+        <a className={router.pathname === "/about" ? "active" : ""}>About</a>
       </Link>
+      {/* Styled JSX: NextJS 고유의 방법 */}
+      {/* <style>: normal html tag */}
+      <style jsx>{`
+        nav {
+          background-color: tomato;
+        }
+        a {
+          text-decoration: none;
+        }
+        .active {
+          color: yellow;
+        }
+      `}</style>
     </nav>
   )
 }
