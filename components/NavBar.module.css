@@ -1,0 +1,8 @@
+/* .module.css 패턴 */
+.link {
+  text-decoration: none;
+}
+
+.active {
+  color: tomato;
+}
