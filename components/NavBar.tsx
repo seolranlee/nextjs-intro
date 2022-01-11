@@ -15,14 +15,11 @@ export default function NavBar(){
       {/* Styled JSX: NextJS 고유의 방법 */}
       {/* <style>: normal html tag */}
       <style jsx>{`
-        nav {
-          background-color: tomato;
-        }
         a {
           text-decoration: none;
         }
         .active {
-          color: yellow;
+          color: tomato;
         }
       `}</style>
     </nav>
