@@ -5,9 +5,10 @@
 import NavBar from "../components/NavBar";
 // Global CSS cannot be imported from files other than your Custom <App>. 
 import "../styles/globals.css"
+import { AppProps } from 'next/app';
 
 // 내 선택이 아니라 NextJS가 Component, pageProps를 같이 불러온다 
-export default function App({ Component, pageProps }) {
+export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <NavBar />
