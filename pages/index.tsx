@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Seo from "../components/Seo";
 
@@ -23,13 +25,41 @@ interface Props {
 }
 
 export default function Home({ results }: Props){
+  const router = useRouter()
+  // navigating하는 방법 2: router hook 사용
+  const onClick = (id: number, title: string) => {
+    router.push({
+      pathname: `/movies/${id}`,
+      // url masking을 통해 숨겨도 query객체에 다 전달된다.
+      query: {
+        title
+      }
+    },
+    // url masking
+    // 유저에게 노출하지 않는다.
+    `/movies/${id}`
+    )
+  }
   return (
     <div className="container">
       <Seo title="Home" />
-      {results?.map((result) => (
-        <div className="movie" key={result.id}>
-          <img src={`https://image.tmdb.org/t/p/w500${result.poster_path}`} />
-          <h4>{result.original_title}</h4>
+      {results?.map((movie) => (
+        <div onClick={() => onClick(movie.id, movie.original_title)} className="movie" key={movie.id}>
+          <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} />
+          <h4>
+            {/* navigating하는 방법 1: Link & a태그 사용 */}
+            <Link href={{
+                pathname: `/movies/${movie.id}`,
+              // url masking을 통해 숨겨도 query객체에 다 전달된다.
+                query: {
+                  title: movie.original_title
+                }
+              }}
+              as={`/movies/${movie.id}`}
+            >
+              <a>{movie.original_title}</a>
+            </Link>
+          </h4>
         </div>
       ))}
       <style jsx>{`
